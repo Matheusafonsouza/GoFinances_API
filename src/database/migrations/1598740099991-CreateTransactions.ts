@@ -42,6 +42,11 @@ export default class CreateTransactions1598740099991
             type: 'timestamp',
             default: 'now()',
           },
+          {
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'now()',
+          },
         ],
       }),
     );
@@ -58,7 +63,7 @@ export default class CreateTransactions1598740099991
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('transactions');
     await queryRunner.dropForeignKey('transactions', 'transactionCategory');
+    await queryRunner.dropTable('transactions');
   }
 }
