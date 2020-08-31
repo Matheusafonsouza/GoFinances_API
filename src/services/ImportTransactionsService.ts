@@ -14,7 +14,6 @@ interface TransactionCSV {
 class ImportTransactionsService {
   async execute(filename: string): Promise<Transaction[]> {
     const csvTransactions: TransactionCSV[] = [];
-
     const transactionRepository = new CreateTransactionService();
 
     const csvFilePath = path.resolve(__dirname, '..', '..', 'tmp', filename);
@@ -29,8 +28,10 @@ class ImportTransactionsService {
 
     const parseCSV = readCSVStream.pipe(parseStream);
 
-    await parseCSV.on('data', line => {
+    parseCSV.on('data', line => {
       const [title, type, value, category] = line;
+
+      if (!title || !type || !value || !category) return;
 
       csvTransactions.push({ title, type, value, category });
     });
@@ -41,10 +42,10 @@ class ImportTransactionsService {
 
     const transactions: Transaction[] = [];
 
-    csvTransactions.forEach(async csvTransaction => {
+    for (const csvTransaction of csvTransactions) {
       const transaction = await transactionRepository.execute(csvTransaction);
       transactions.push(transaction);
-    });
+    }
 
     return transactions;
   }
