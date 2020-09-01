@@ -20,8 +20,19 @@ transactionsRouter.get('/', async (request, response) => {
 
   const balance = await transactionsRepository.getBalance();
 
+  const formattedTransactions = transactions.map(transaction => ({
+    id: transaction.id,
+    title: transaction.title,
+    value: transaction.value,
+    type: transaction.type,
+    category: transaction.category_id,
+    created_at: transaction.created_at,
+    updated_at: transaction.updated_at,
+    category_id: transaction.category_id.id,
+  }));
+
   return response.status(200).json({
-    transactions,
+    formattedTransactions,
     balance,
   });
 });
