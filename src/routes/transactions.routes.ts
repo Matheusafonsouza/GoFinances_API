@@ -32,7 +32,7 @@ transactionsRouter.get('/', async (request, response) => {
   }));
 
   return response.status(200).json({
-    formattedTransactions,
+    transactions: formattedTransactions,
     balance,
   });
 });
